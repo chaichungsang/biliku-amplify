@@ -1,0 +1,27 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with primary red -->
+  <circle cx="16" cy="16" r="16" fill="#cc0001"/>
+  
+  <!-- Yellow accent triangle (roof element) -->
+  <path d="M16 6 L26 14 L20 14 L16 10 L12 14 L6 14 Z" fill="#ffd100"/>
+  
+  <!-- Bold letter B in white -->
+  <g fill="#ffffff" stroke="none">
+    <!-- Main vertical bar -->
+    <rect x="10" y="10" width="3" height="14" rx="1.5"/>
+    
+    <!-- Top section -->
+    <rect x="13" y="10" width="6" height="3" rx="1.5"/>
+    <rect x="16" y="13" width="3" height="3" rx="1.5"/>
+    
+    <!-- Middle section -->
+    <rect x="13" y="16" width="7" height="3" rx="1.5"/>
+    
+    <!-- Bottom section -->
+    <rect x="13" y="19" width="6" height="3" rx="1.5"/>
+    <rect x="16" y="22" width="3" height="2" rx="1.5"/>
+  </g>
+  
+  <!-- Small black accent for depth -->
+  <circle cx="16" cy="16" r="16" fill="none" stroke="#000000" stroke-width="0.5" opacity="0.2"/>
+</svg>

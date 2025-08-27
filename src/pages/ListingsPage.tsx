@@ -1,158 +1,414 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import {
   Box,
   Typography,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Chip,
   Button,
   CircularProgress,
+  styled,
 } from '@mui/material';
-import { LocationOn, AttachMoney } from '@mui/icons-material';
+import { ArrowBack, Search } from '@mui/icons-material';
+import RoomCard from '../components/room/RoomCard';
+import SortControls from '../components/listings/SortControls';
+import PaginationControls from '../components/listings/PaginationControls';
+import { RoomListing, ListingFilters, PaginationInfo } from '../types/listing';
 
-// Mock data for now - will be replaced with real data
-const mockRooms = [
+// Mock data matching Vue structure - will be replaced with real data
+const mockListings: RoomListing[] = [
   {
-    id: '1',
-    title: 'Cozy Single Room near UNIMAS',
+    id: 'demo-1',
+    title: 'Modern Studio Unit in City Center',
+    city: 'Kuching',
+    state: 'Sarawak',
+    location: 'Pending',
+    room_type: 'studio_unit',
+    price: 800,
+    images: ['/assets/images/placeholder.svg'],
+    gender_preference: 'any',
+    available_from: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    amenities: ['WiFi', 'AC', 'Parking'],
+    furnished: true,
+    pet_friendly: false,
+  },
+  {
+    id: 'demo-2',
+    title: 'Cozy Master Room near UNIMAS',
+    city: 'Kota Samarahan',
+    state: 'Sarawak',
+    location: 'UNIMAS Area',
+    room_type: 'master_bedroom',
+    price: 450,
+    images: ['/assets/images/placeholder.svg'],
+    gender_preference: 'female',
+    available_from: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    amenities: ['Private Bathroom', 'Furnished', 'WiFi'],
+    furnished: true,
+    pet_friendly: true,
+  },
+  {
+    id: 'demo-3',
+    title: 'Spacious Single Room in Bintulu',
+    city: 'Bintulu',
+    state: 'Sarawak',
+    location: 'Town Area',
+    room_type: 'single_room',
     price: 350,
-    location: 'Kota Samarahan',
-    roomType: 'Single Room',
-    images: ['https://via.placeholder.com/300x200?text=Room+1'],
-    amenities: ['WiFi', 'AC', 'Private Bathroom'],
-    availability: true,
-  },
-  {
-    id: '2',
-    title: 'Shared Room in City Center',
-    price: 250,
-    location: 'Kuching',
-    roomType: 'Shared Room',
-    images: ['https://via.placeholder.com/300x200?text=Room+2'],
-    amenities: ['WiFi', 'Kitchen', 'Laundry'],
-    availability: true,
-  },
-  {
-    id: '3',
-    title: 'Master Room with Attached Bathroom',
-    price: 500,
-    location: 'Petra Jaya',
-    roomType: 'Master Room',
-    images: ['https://via.placeholder.com/300x200?text=Room+3'],
-    amenities: ['WiFi', 'AC', 'Private Bathroom', 'Parking'],
-    availability: true,
+    images: ['/assets/images/placeholder.svg'],
+    gender_preference: 'male',
+    available_from: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    amenities: ['Furnished', 'Shared Kitchen', 'Near Public Transport'],
+    furnished: true,
+    pet_friendly: false,
   },
 ];
 
-const ListingsPage: React.FC = () => {
-  const [loading, setLoading] = React.useState(false);
-  const [rooms, setRooms] = React.useState(mockRooms);
+// Styled components with Sarawak theming
+const PageContainer = styled(Box)(({ theme }) => ({
+  padding: '40px 0',
+  fontFamily: '"Poppins", sans-serif',
+  backgroundColor: '#f8f9fa',
+  minHeight: '100vh',
+}));
 
-  if (loading) {
-    return (
-      <Box className="loading">
-        <CircularProgress />
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Loading rooms...
-        </Typography>
-      </Box>
-    );
-  }
+const Container = styled(Box)({
+  maxWidth: 1200,
+  margin: '0 auto',
+  padding: '0 20px',
+});
+
+const ResultsHeader = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '30px',
+  '@media (max-width: 768px)': {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '15px',
+  },
+});
+
+const PageTitle = styled(Typography)({
+  fontSize: '2.2rem',
+  color: '#333',
+  fontWeight: 700,
+  margin: 0,
+  '@media (max-width: 768px)': {
+    fontSize: '1.8rem',
+  },
+});
+
+const BackButton = styled(Button)({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  color: '#555',
+  textDecoration: 'none',
+  fontWeight: 600,
+  fontSize: '1rem',
+  padding: '10px 16px',
+  borderRadius: '8px',
+  border: '2px solid #eee',
+  backgroundColor: 'white',
+  transition: 'all 0.3s',
+  textTransform: 'none',
+  '&:hover': {
+    backgroundColor: '#f5f5f5',
+    transform: 'translateY(-2px)',
+    borderColor: '#cc0001', // Sarawak red
+    color: '#cc0001',
+  },
+});
+
+const ResultsContainer = styled(Box)({
+  marginTop: '30px',
+});
+
+const ListingsHeader = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '30px',
+  '@media (max-width: 768px)': {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: '15px',
+  },
+});
+
+const ListingsGrid = styled(Box)({
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  gap: '30px',
+  marginBottom: '40px',
+  '@media (max-width: 768px)': {
+    gap: '20px',
+  },
+});
+
+const LoadingSpinner = styled(Box)({
+  textAlign: 'center',
+  padding: '80px',
+  fontSize: '1.2rem',
+  color: '#666',
+  backgroundColor: '#fff',
+  borderRadius: '12px',
+  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
+  '& .MuiCircularProgress-root': {
+    marginBottom: '10px',
+    color: '#cc0001', // Sarawak red
+  },
+});
+
+const ErrorMessage = styled(Box)({
+  textAlign: 'center',
+  padding: '40px',
+  backgroundColor: '#fff3f3',
+  borderRadius: '12px',
+  color: '#e53935',
+  fontSize: '1.1rem',
+  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.05)',
+});
+
+const EmptyResults = styled(Box)({
+  textAlign: 'center',
+  padding: '80px 20px',
+  backgroundColor: '#fff',
+  borderRadius: '12px',
+  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.05)',
+  '& .MuiSvgIcon-root': {
+    fontSize: '4rem',
+    color: '#ddd',
+    marginBottom: '20px',
+    display: 'block',
+  },
+  '& p': {
+    fontSize: '1.2rem',
+    color: '#777',
+    marginBottom: '25px',
+  },
+});
+
+const ResetButton = styled(Button)({
+  backgroundColor: '#cc0001', // Sarawak red
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  padding: '12px 24px',
+  fontSize: '1rem',
+  fontWeight: 600,
+  cursor: 'pointer',
+  transition: 'all 0.3s',
+  textTransform: 'none',
+  textDecoration: 'none',
+  '&:hover': {
+    backgroundColor: '#b00001',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 6px 10px rgba(204, 0, 1, 0.3)',
+  },
+});
+
+const ListingsPage: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  
+  const [listings, setListings] = useState<RoomListing[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [filters, setFilters] = useState<ListingFilters>({
+    orderBy: 'created_at',
+    orderDir: 'desc',
+  });
+  const [pagination, setPagination] = useState<PaginationInfo>({
+    currentPage: 1,
+    totalPages: 1,
+    itemsPerPage: 9,
+    totalItems: 0,
+  });
+
+  // Check if this is a default search (no filters)
+  const isDefaultSearch = (
+    !filters.city &&
+    !filters.roomType &&
+    !filters.minPrice &&
+    !filters.maxPrice &&
+    !filters.gender &&
+    !filters.religion &&
+    !filters.isPetFriendly &&
+    (!filters.amenities || filters.amenities.length === 0) &&
+    !filters.searchQuery &&
+    !filters.availableFrom
+  );
+
+  // Parse query parameters
+  useEffect(() => {
+    const newFilters: ListingFilters = {
+      city: searchParams.get('city') || undefined,
+      roomType: searchParams.get('roomType') || undefined,
+      minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
+      maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+      gender: searchParams.get('gender') || undefined,
+      religion: searchParams.get('religion') || undefined,
+      isPetFriendly: searchParams.get('isPetFriendly') === 'true',
+      amenities: searchParams.getAll('amenities'),
+      orderBy: searchParams.get('orderBy') || 'created_at',
+      orderDir: (searchParams.get('orderDir') as 'asc' | 'desc') || 'desc',
+      searchQuery: searchParams.get('searchQuery') || undefined,
+      availableFrom: searchParams.get('availableFrom') || undefined,
+    };
+    
+    const currentPage = Number(searchParams.get('page')) || 1;
+    
+    setFilters(newFilters);
+    setPagination(prev => ({ ...prev, currentPage }));
+    
+    // Fetch listings when parameters change
+    fetchListings(newFilters, currentPage);
+  }, [searchParams]);
+
+  const fetchListings = async (currentFilters: ListingFilters, page: number) => {
+    setLoading(true);
+    setError(null);
+
+    // Simulate loading delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    try {
+      // For now, use mock data
+      // In real implementation, this would call the listing service
+      if (isDefaultSearch) {
+        setListings([]);
+        setPagination(prev => ({
+          ...prev,
+          totalItems: 0,
+          totalPages: 0,
+        }));
+      } else {
+        setListings(mockListings);
+        setPagination(prev => ({
+          ...prev,
+          totalItems: mockListings.length,
+          totalPages: Math.ceil(mockListings.length / prev.itemsPerPage),
+        }));
+      }
+    } catch (err) {
+      console.error('Error fetching listings:', err);
+      setError('Failed to load listings. Please try again.');
+      // Fallback to mock data on error
+      setListings(mockListings);
+      setPagination(prev => ({
+        ...prev,
+        totalItems: mockListings.length,
+        totalPages: Math.ceil(mockListings.length / prev.itemsPerPage),
+      }));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSortChange = (newSortValue: string) => {
+    if (isDefaultSearch) return;
+    
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('orderBy', newSortValue);
+    newParams.set('page', '1'); // Reset to first page when sorting
+    navigate({ pathname: '/listings', search: newParams.toString() });
+  };
+
+  const handlePageChange = (page: number) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('page', page.toString());
+    navigate({ pathname: '/listings', search: newParams.toString() });
+  };
+
+  const handleViewListing = (id: string) => {
+    navigate(`/listings/${id}`);
+  };
 
   return (
-    <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Available Rooms
-      </Typography>
-      
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        {rooms.length} rooms available in Sarawak
-      </Typography>
+    <PageContainer>
+      <Container>
+        <ResultsHeader>
+          <PageTitle variant="h1">
+            Search Results
+          </PageTitle>
+          <BackButton component={Link as any} to="/" sx={{ textDecoration: 'none' }}>
+            <ArrowBack />
+            Back to Search
+          </BackButton>
+        </ResultsHeader>
 
-      <Grid container spacing={3}>
-        {rooms.map((room) => (
-          <Grid item xs={12} sm={6} md={4} key={room.id}>
-            <Card className="room-card" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image={room.images[0]}
-                alt={room.title}
-                sx={{ objectFit: 'cover' }}
+        <ResultsContainer>
+          <ListingsHeader>
+            <Typography variant="h4" component="h2">
+              Available Rooms
+            </Typography>
+            <SortControls
+              value={filters.orderBy || 'created_at'}
+              onChange={handleSortChange}
+              disabled={isDefaultSearch}
+            />
+          </ListingsHeader>
+
+          {loading && (
+            <LoadingSpinner>
+              <CircularProgress size={32} />
+              <Typography>Loading...</Typography>
+            </LoadingSpinner>
+          )}
+
+          {!loading && error && (
+            <ErrorMessage>
+              <Typography>{error}</Typography>
+            </ErrorMessage>
+          )}
+
+          {!loading && !error && isDefaultSearch && (
+            <EmptyResults>
+              <Search />
+              <Typography>Please provide search criteria to find properties</Typography>
+              <ResetButton component={Link as any} to="/" sx={{ textDecoration: 'none' }}>
+                Go to Search
+              </ResetButton>
+            </EmptyResults>
+          )}
+
+          {!loading && !error && !isDefaultSearch && listings.length === 0 && (
+            <EmptyResults>
+              <Search />
+              <Typography>No listings found matching your criteria</Typography>
+              <ResetButton component={Link as any} to="/" sx={{ textDecoration: 'none' }}>
+                Modify Search
+              </ResetButton>
+            </EmptyResults>
+          )}
+
+          {!loading && !error && listings.length > 0 && (
+            <>
+              <ListingsGrid>
+                {listings.map((listing) => (
+                  <RoomCard
+                    key={listing.id}
+                    listing={listing}
+                    onViewListing={handleViewListing}
+                  />
+                ))}
+              </ListingsGrid>
+
+              <PaginationControls
+                pagination={pagination}
+                onPageChange={handlePageChange}
+                disabled={loading}
               />
-              <CardContent sx={{ flex: 1 }}>
-                <Typography variant="h6" component="h3" gutterBottom>
-                  {room.title}
-                </Typography>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <LocationOn fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary" sx={{ ml: 0.5 }}>
-                    {room.location}
-                  </Typography>
-                </Box>
-                
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <AttachMoney fontSize="small" color="primary" />
-                  <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                    RM {room.price}/month
-                  </Typography>
-                </Box>
-
-                <Chip
-                  label={room.roomType}
-                  size="small"
-                  color="secondary"
-                  sx={{ mb: 2 }}
-                />
-
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 2 }}>
-                  {room.amenities.slice(0, 3).map((amenity) => (
-                    <Chip
-                      key={amenity}
-                      label={amenity}
-                      size="small"
-                      variant="outlined"
-                    />
-                  ))}
-                  {room.amenities.length > 3 && (
-                    <Chip
-                      label={`+${room.amenities.length - 3} more`}
-                      size="small"
-                      variant="outlined"
-                      color="primary"
-                    />
-                  )}
-                </Box>
-              </CardContent>
-              
-              <Box sx={{ p: 2, pt: 0 }}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  href={`/listings/${room.id}`}
-                >
-                  View Details
-                </Button>
-              </Box>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      {rooms.length === 0 && (
-        <Box sx={{ textAlign: 'center', py: 8 }}>
-          <Typography variant="h6" color="text.secondary">
-            No rooms found
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Try adjusting your search criteria
-          </Typography>
-        </Box>
-      )}
-    </Box>
+            </>
+          )}
+        </ResultsContainer>
+      </Container>
+    </PageContainer>
   );
 };
 
