@@ -47,15 +47,42 @@ import { religions } from '../data/religions';
 
 // Styled components matching Vue styles
 const HeroSection = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8))',
+  background: `
+    linear-gradient(135deg, 
+      rgba(255, 248, 225, 0.98) 0%, 
+      rgba(255, 255, 255, 0.95) 15%,
+      rgba(255, 209, 0, 0.12) 30%,
+      rgba(255, 248, 225, 0.95) 50%,
+      rgba(204, 0, 1, 0.08) 70%,
+      rgba(255, 209, 0, 0.15) 85%,
+      rgba(255, 248, 225, 0.98) 100%
+    ),
+    radial-gradient(ellipse at top left, rgba(204, 0, 1, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(255, 209, 0, 0.12) 0%, transparent 65%)
+  `,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   position: 'relative',
-  color: 'white',
+  color: '#333333',
   textAlign: 'center',
   padding: '80px 20px',
   borderBottom: '6px solid #ffd100',
   overflow: 'hidden',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `
+      linear-gradient(45deg, transparent 48%, rgba(255, 209, 0, 0.04) 50%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(204, 0, 1, 0.02) 50%, transparent 52%)
+    `,
+    backgroundSize: '60px 60px',
+    opacity: 0.5,
+    pointerEvents: 'none'
+  }
 }));
 
 const HeroTextContainer = styled(Box)(({ theme }) => ({
@@ -94,13 +121,33 @@ const HeroFreeBadge = styled(Box)(({ theme }) => ({
 }));
 
 const SearchContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: 'rgba(0, 0, 0, 0.7)',
-  borderRadius: '12px',
-  padding: '30px',
+  background: `
+    linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.98) 0%, 
+      rgba(255, 248, 225, 0.95) 25%,
+      rgba(255, 255, 255, 0.96) 50%,
+      rgba(255, 248, 225, 0.95) 75%,
+      rgba(255, 255, 255, 0.98) 100%
+    )
+  `,
+  borderRadius: '16px',
+  padding: '35px',
   maxWidth: '1000px',
   margin: '0 auto',
-  boxShadow: '0 5px 20px rgba(0, 0, 0, 0.3)',
-  border: '1px solid rgba(255, 209, 0, 0.3)',
+  boxShadow: '0 12px 40px rgba(204, 0, 1, 0.08), 0 6px 20px rgba(255, 209, 0, 0.12)',
+  border: '2px solid rgba(255, 209, 0, 0.4)',
+  position: 'relative',
+  backdropFilter: 'blur(8px)',
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '4px',
+    background: 'linear-gradient(to right, #cc0001 0%, #cc0001 33%, rgba(0, 0, 0, 0.8) 33%, rgba(0, 0, 0, 0.8) 66%, #ffd100 66%, #ffd100 100%)',
+    borderRadius: '16px 16px 0 0'
+  }
 }));
 
 const SearchButton = styled(Button)(({ theme }) => ({
@@ -185,23 +232,36 @@ const SarawakFlagStrip = styled(Box)(({ theme }) => ({
 }));
 
 const ListingCard = styled(Card)(({ theme }) => ({
-  backgroundColor: '#f8f9fa',
+  background: 'linear-gradient(135deg, #ffffff 0%, rgba(255, 248, 225, 0.8) 50%, #ffffff 100%)',
   borderRadius: '8px',
   overflow: 'hidden',
-  boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+  boxShadow: '0 2px 15px rgba(204, 0, 1, 0.08), 0 1px 6px rgba(255, 209, 0, 0.1)',
   transition: 'all 0.3s ease',
   cursor: 'pointer',
-  border: '1px solid #e0e0e0',
+  border: '1px solid rgba(255, 209, 0, 0.3)',
   position: 'relative',
   display: 'flex',
   flexDirection: 'row',
   [theme.breakpoints.down('md')]: {
     flexDirection: 'column',
   },
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '2px',
+    background: 'linear-gradient(to right, #cc0001 0%, #cc0001 33%, #000000 33%, #000000 66%, #ffd100 66%, #ffd100 100%)',
+    opacity: 0.6
+  },
   '&:hover': {
     transform: 'translateY(-5px)',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
-    backgroundColor: '#fff',
+    boxShadow: '0 8px 30px rgba(204, 0, 1, 0.15), 0 4px 15px rgba(255, 209, 0, 0.2)',
+    background: 'linear-gradient(135deg, #ffffff 0%, rgba(255, 248, 225, 0.95) 50%, #ffffff 100%)',
+    '&::before': {
+      opacity: 1
+    }
   },
 }));
 
@@ -502,8 +562,8 @@ const HomePage: React.FC = () => {
                     fontSize: { xs: '2rem', md: '2.8rem' },
                     fontWeight: 700,
                     marginBottom: '15px',
-                    color: '#ffd100',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                    color: '#cc0001',
+                    textShadow: '1px 1px 3px rgba(255, 209, 0, 0.3)',
                   }}
                 >
                   {currentMessage.title}
@@ -513,9 +573,10 @@ const HomePage: React.FC = () => {
                   sx={{
                     fontSize: { xs: '1.1rem', md: '1.2rem' },
                     marginBottom: '30px',
-                    color: '#fff',
+                    color: '#555555',
                     maxWidth: '700px',
                     margin: '0 auto 30px auto',
+                    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)',
                   }}
                 >
                   {currentMessage.subtitle}
@@ -586,10 +647,10 @@ const HomePage: React.FC = () => {
               </Grid>
               <Grid item xs={12} sm={12} md={6}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: 'white', marginBottom: '8px' }}>
+                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
                     Gender Preference
                   </Typography>
-                  <Box sx={{ display: 'flex', gap: '8px', backgroundColor: 'rgba(255, 255, 255, 0.1)', padding: '4px', borderRadius: '8px' }}>
+                  <Box sx={{ display: 'flex', gap: '8px', backgroundColor: 'rgba(204, 0, 1, 0.05)', padding: '4px', borderRadius: '8px', border: '1px solid rgba(255, 209, 0, 0.3)' }}>
                     <GenderButton
                       active={searchFilters.genderPreference === ''}
                       onClick={() => handleInputChange('genderPreference', '')}
@@ -620,7 +681,7 @@ const HomePage: React.FC = () => {
             <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
               <Grid item xs={12} sm={6} md={4}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: 'white', marginBottom: '8px' }}>
+                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
                     Price Range (RM)
                   </Typography>
                   <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -665,7 +726,7 @@ const HomePage: React.FC = () => {
               </Grid>
               <Grid item xs={12} sm={12} md={4}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: 'white', marginBottom: '8px' }}>
+                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
                     Available From
                   </Typography>
                   <TextField
@@ -684,7 +745,7 @@ const HomePage: React.FC = () => {
 
             {/* Features & Amenities */}
             <Box sx={{ marginBottom: '20px' }}>
-              <Typography variant="body2" sx={{ color: 'white', marginBottom: '8px', fontWeight: 600 }}>
+              <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
                 Features & Amenities
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -727,7 +788,27 @@ const HomePage: React.FC = () => {
       </HeroSection>
 
       {/* Featured Listings */}
-      <Container maxWidth="lg" sx={{ padding: '60px 20px' }}>
+      <Container 
+        maxWidth="lg" 
+        sx={{ 
+          padding: '60px 20px',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 225, 0.8) 30%, rgba(255, 255, 255, 0.9) 70%, rgba(255, 248, 225, 0.85) 100%)',
+          borderRadius: '25px 25px 0 0',
+          position: 'relative',
+          marginTop: '-20px',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '70%',
+            height: '4px',
+            background: 'linear-gradient(to right, #cc0001 0%, #cc0001 33%, rgba(0, 0, 0, 0.6) 33%, rgba(0, 0, 0, 0.6) 66%, #ffd100 66%, #ffd100 100%)',
+            borderRadius: '0 0 4px 4px'
+          }
+        }}
+      >
         <SectionHeader>
           <SarawakFlagStrip />
           <Typography

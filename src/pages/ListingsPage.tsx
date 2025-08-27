@@ -336,10 +336,12 @@ const ListingsPage: React.FC = () => {
           <PageTitle variant="h1">
             Search Results
           </PageTitle>
-          <BackButton component={Link as any} to="/" sx={{ textDecoration: 'none' }}>
-            <ArrowBack />
-            Back to Search
-          </BackButton>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <BackButton sx={{ textDecoration: 'none' }}>
+              <ArrowBack />
+              Back to Search
+            </BackButton>
+          </Link>
         </ResultsHeader>
 
         <ResultsContainer>
@@ -371,9 +373,11 @@ const ListingsPage: React.FC = () => {
             <EmptyResults>
               <Search />
               <Typography>Please provide search criteria to find properties</Typography>
-              <ResetButton component={Link as any} to="/" sx={{ textDecoration: 'none' }}>
-                Go to Search
-              </ResetButton>
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <ResetButton sx={{ textDecoration: 'none' }}>
+                  Go to Search
+                </ResetButton>
+              </Link>
             </EmptyResults>
           )}
 
@@ -381,9 +385,11 @@ const ListingsPage: React.FC = () => {
             <EmptyResults>
               <Search />
               <Typography>No listings found matching your criteria</Typography>
-              <ResetButton component={Link as any} to="/" sx={{ textDecoration: 'none' }}>
-                Modify Search
-              </ResetButton>
+              <Link to="/" style={{ textDecoration: 'none' }}>
+                <ResetButton sx={{ textDecoration: 'none' }}>
+                  Modify Search
+                </ResetButton>
+              </Link>
             </EmptyResults>
           )}
 

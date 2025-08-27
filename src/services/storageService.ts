@@ -71,7 +71,7 @@ export class StorageService implements StorageServiceInterface {
       console.log('Uploading image to S3 path:', path);
 
       // Upload file to S3
-      const uploadResult: UploadDataWithPathOutput = await uploadData({
+      const uploadTask = uploadData({
         path,
         data: file,
         options: {
@@ -85,7 +85,9 @@ export class StorageService implements StorageServiceInterface {
           },
           ...options
         }
-      }).result;
+      });
+
+      const uploadResult = await uploadTask.result;
 
       // Get public URL
       const urlResult = await getUrl({

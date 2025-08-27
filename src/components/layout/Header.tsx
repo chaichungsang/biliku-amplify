@@ -133,7 +133,9 @@ const NavButton = styled(Button)(({ theme, active }: { theme?: any; active?: boo
   },
 }));
 
-const AuthButton = styled(Button)(({ variant }: { variant?: 'outlined' | 'contained' }) => ({
+const AuthButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'variant'
+})(({ variant }: { variant?: 'outlined' | 'contained' }) => ({
   padding: '10px 20px',
   borderRadius: '6px',
   fontWeight: 600,
@@ -294,40 +296,45 @@ const Header: React.FC = () => {
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
-        <LogoContainer component={Link as any} to="/">
-          <SarawakFlag 
-            src="/assets/images/flags/sarawak-flag.png" 
-            alt="Sarawak Flag" 
-            className="sarawak-flag"
-          />
-          <Typography variant="h6" component="span">
-            Biliku
-          </Typography>
+        <LogoContainer component="div">
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'inherit' }}>
+            <SarawakFlag 
+              src="/assets/images/flags/sarawak-flag.png" 
+              alt="Sarawak Flag" 
+              className="sarawak-flag"
+            />
+            <Typography variant="h6" component="span">
+              Biliku
+            </Typography>
+          </Link>
         </LogoContainer>
 
         {/* Desktop Navigation */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3, margin: '0 20px', flex: 1, justifyContent: 'center' }}>
-          <NavButton 
-            component={Link as any} 
-            to="/"
-            active={location.pathname === '/'}
-          >
+          <Button component={Link} to="/" sx={{ 
+            color: '#333', textDecoration: 'none', padding: '8px 12px', position: 'relative', 
+            fontWeight: location.pathname === '/' ? 600 : 500, fontSize: '1.1rem', borderRadius: '6px',
+            backgroundColor: location.pathname === '/' ? 'rgba(204, 0, 1, 0.08)' : 'transparent',
+            '&:hover': { color: '#cc0001', backgroundColor: 'rgba(204, 0, 1, 0.05)' }
+          }}>
             Home
-          </NavButton>
-          <NavButton 
-            component={Link as any} 
-            to="/about"
-            active={location.pathname === '/about'}
-          >
+          </Button>
+          <Button component={Link} to="/about" sx={{ 
+            color: '#333', textDecoration: 'none', padding: '8px 12px', position: 'relative', 
+            fontWeight: location.pathname === '/about' ? 600 : 500, fontSize: '1.1rem', borderRadius: '6px',
+            backgroundColor: location.pathname === '/about' ? 'rgba(204, 0, 1, 0.08)' : 'transparent',
+            '&:hover': { color: '#cc0001', backgroundColor: 'rgba(204, 0, 1, 0.05)' }
+          }}>
             About
-          </NavButton>
-          <NavButton 
-            component={Link as any} 
-            to="/contact"
-            active={location.pathname === '/contact'}
-          >
+          </Button>
+          <Button component={Link} to="/contact" sx={{ 
+            color: '#333', textDecoration: 'none', padding: '8px 12px', position: 'relative', 
+            fontWeight: location.pathname === '/contact' ? 600 : 500, fontSize: '1.1rem', borderRadius: '6px',
+            backgroundColor: location.pathname === '/contact' ? 'rgba(204, 0, 1, 0.08)' : 'transparent',
+            '&:hover': { color: '#cc0001', backgroundColor: 'rgba(204, 0, 1, 0.05)' }
+          }}>
             Contact Us
-          </NavButton>
+          </Button>
         </Box>
 
         {/* Desktop Auth Buttons */}
@@ -384,12 +391,16 @@ const Header: React.FC = () => {
             </>
           ) : (
             <>
-              <AuthButton component={Link as any} to="/login" variant="outlined">
-                Login
-              </AuthButton>
-              <AuthButton component={Link as any} to="/register" variant="contained">
-                Sign Up
-              </AuthButton>
+              <Link to="/login" style={{ textDecoration: 'none' }}>
+                <AuthButton variant="outlined">
+                  Login
+                </AuthButton>
+              </Link>
+              <Link to="/register" style={{ textDecoration: 'none' }}>
+                <AuthButton variant="contained">
+                  Sign Up
+                </AuthButton>
+              </Link>
             </>
           )}
         </Box>

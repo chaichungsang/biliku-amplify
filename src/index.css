@@ -8,7 +8,54 @@ body {
   font-family: 'Roboto', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #faf8f5 0%, #fff8e1 20%, rgba(255, 209, 0, 0.08) 35%, #fff8e1 65%, #faf8f5 80%, rgba(255, 255, 255, 0.95) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Sarawak flag inspired background patterns */
+.sarawak-gradient-light {
+  background: linear-gradient(45deg, #faf8f5 0%, rgba(255, 209, 0, 0.03) 50%, #faf8f5 100%);
+}
+
+.sarawak-gradient-warm {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 248, 225, 0.6) 25%, rgba(255, 209, 0, 0.02) 50%, rgba(255, 248, 225, 0.6) 75%, #ffffff 100%);
+}
+
+.sarawak-gradient-hero {
+  background: linear-gradient(135deg, rgba(204, 0, 1, 0.15) 0%, rgba(255, 209, 0, 0.08) 30%, rgba(255, 248, 225, 0.95) 60%, rgba(255, 209, 0, 0.05) 85%, rgba(204, 0, 1, 0.08) 100%);
+}
+
+.sarawak-gradient-card {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 248, 225, 0.4) 50%, #ffffff 100%);
+}
+
+.sarawak-stripe-accent {
+  position: relative;
+}
+
+.sarawak-stripe-accent::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #cc0001 0%, #cc0001 33%, #000000 33%, #000000 66%, #ffd100 66%, #ffd100 100%);
+}
+
+.sarawak-stripe-top {
+  position: relative;
+}
+
+.sarawak-stripe-top::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(to right, #cc0001 0%, #cc0001 33%, #000000 33%, #000000 66%, #ffd100 66%, #ffd100 100%);
 }
 
 /* Amplify UI overrides */

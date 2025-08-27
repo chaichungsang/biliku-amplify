@@ -228,10 +228,12 @@ export class AgreementService implements AgreementServiceInterface {
         propertyDetails: agreementData.propertyDetails,
         rentalTerms: agreementData.rentalTerms,
         tenancyPeriod: agreementData.tenancyPeriod,
-        termsConditions: agreementData.termsConditions
+        termsConditions: agreementData.termsConditions,
+        documentHtml: '', // Will be updated
+        generatedAt: new Date().toISOString()
       } as RentalAgreement);
 
-      input.documentHtml = documentHtml;
+      (input as any).documentHtml = documentHtml;
 
       const result: GraphQLResult<any> = await this.client.graphql({
         query: CREATE_RENTAL_AGREEMENT,
@@ -311,8 +313,8 @@ export class AgreementService implements AgreementServiceInterface {
         })
       ]);
 
-      const landlordAgreements = landlordResult.data?.listAgreements?.items || [];
-      const tenantAgreements = tenantResult.data?.listAgreements?.items || [];
+      const landlordAgreements = (landlordResult as any).data?.listAgreements?.items || [];
+      const tenantAgreements = (tenantResult as any).data?.listAgreements?.items || [];
 
       // Combine and deduplicate
       const allAgreements = [...landlordAgreements, ...tenantAgreements];

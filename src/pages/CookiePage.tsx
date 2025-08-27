@@ -34,7 +34,7 @@ import {
   SettingsOutlined as SettingsIcon,
   AnalyticsOutlined as AnalyticsIcon,
   SecurityOutlined as SecurityIcon,
-  PersonalizedOutlined as PersonalizedIcon,
+  PersonOutlined as PersonalizedIcon,
   ExpandMoreOutlined as ExpandMoreIcon,
   InfoOutlined as InfoIcon,
   VerifiedUserOutlined as VerifiedIcon,

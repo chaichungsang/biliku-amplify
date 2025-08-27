@@ -125,7 +125,7 @@ export class AuthService {
         gender: amplifyUser.attributes?.gender as 'male' | 'female' | 'other' || undefined,
         emailConfirmed: amplifyUser.attributes?.email_verified === 'true',
         createdAt: new Date().toISOString(), // Amplify doesn't provide this directly
-        lastSignIn: session.tokens?.accessToken ? 
+        lastSignIn: session.tokens?.accessToken?.payload?.iat ? 
           new Date(session.tokens.accessToken.payload.iat * 1000).toISOString() : 
           undefined
       };

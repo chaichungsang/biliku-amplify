@@ -297,13 +297,11 @@ const ForgotPasswordPage: React.FC = () => {
               {loading ? 'Sending...' : 'Send Reset Instructions'}
             </AuthButton>
 
-            <SecondaryButton
-              component={Link as any}
-              to="/login"
-              startIcon={<ArrowBackIcon />}
-            >
-              Back to Sign In
-            </SecondaryButton>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
+              <SecondaryButton startIcon={<ArrowBackIcon />}>
+                Back to Sign In
+              </SecondaryButton>
+            </Link>
           </Box>
         </Box>
 

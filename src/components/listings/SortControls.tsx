@@ -77,9 +77,9 @@ const SortControls: React.FC<SortControlsProps> = ({ value, onChange, disabled =
   return (
     <ControlsContainer>
       <SortFieldContainer>
-        <SortLabel component="label" htmlFor="sortOptions" as="label">
+        <Typography component="label" sx={{ fontWeight: 500, color: '#666', fontSize: '0.95rem' }}>
           Sort By
-        </SortLabel>
+        </Typography>
         <FormControl size="small">
           <StyledSelect
             id="sortOptions"

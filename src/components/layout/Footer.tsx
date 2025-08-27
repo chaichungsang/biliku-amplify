@@ -18,7 +18,18 @@ import {
 
 // Styled components for custom footer styling
 const StyledFooter = styled(Box)(({ theme }) => ({
-  background: 'linear-gradient(to bottom, #000000 0%, #000000 95%, #ffd100 95%, #ffd100 100%)',
+  background: `
+    linear-gradient(135deg, 
+      rgba(204, 0, 1, 0.95) 0%, 
+      rgba(204, 0, 1, 0.85) 20%,
+      rgba(255, 209, 0, 0.25) 40%,
+      rgba(255, 248, 225, 0.15) 60%,
+      rgba(255, 209, 0, 0.35) 80%,
+      rgba(204, 0, 1, 0.9) 100%
+    ),
+    radial-gradient(ellipse at top right, rgba(255, 209, 0, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom left, rgba(204, 0, 1, 0.2) 0%, transparent 50%)
+  `,
   color: '#fff',
   padding: '50px 0 20px',
   marginTop: '50px',
@@ -34,14 +45,26 @@ const StyledFooter = styled(Box)(({ theme }) => ({
     top: 0,
     left: 0,
     width: '100%',
-    height: '100%',
-    backgroundImage: 'url("/assets/images/flags/sarawak-flag.png")',
-    backgroundPosition: 'center',
-    backgroundSize: '300px',
-    backgroundRepeat: 'no-repeat',
-    opacity: 0.05,
-    zIndex: 0,
+    height: '6px',
+    background: 'linear-gradient(to right, #cc0001 0%, #cc0001 33%, rgba(0, 0, 0, 0.8) 33%, rgba(0, 0, 0, 0.8) 66%, #ffd100 66%, #ffd100 100%)',
+    zIndex: 1,
   },
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: '6px',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `
+      linear-gradient(45deg, transparent 48%, rgba(255, 209, 0, 0.08) 50%, transparent 52%),
+      linear-gradient(-45deg, transparent 48%, rgba(204, 0, 1, 0.05) 50%, transparent 52%)
+    `,
+    backgroundSize: '35px 35px',
+    opacity: 0.4,
+    pointerEvents: 'none',
+    zIndex: 0
+  }
 }));
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -50,6 +73,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   padding: '0 20px',
   position: 'relative',
   zIndex: 2,
+  background: 'rgba(255, 255, 255, 0.05)',
+  borderRadius: '20px',
+  backdropFilter: 'blur(8px)',
+  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(255, 209, 0, 0.1)'
 }));
 
 const FooterGrid = styled(Grid)(({ theme }) => ({
@@ -66,6 +93,8 @@ const FooterTitle = styled(Typography)(({ theme }) => ({
   color: '#ffd100',
   position: 'relative',
   display: 'inline-block',
+  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+  fontWeight: 700,
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -84,6 +113,8 @@ const FooterHeading = styled(Typography)(({ theme }) => ({
   color: '#ffd100',
   position: 'relative',
   display: 'inline-block',
+  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
+  fontWeight: 600,
   '&::after': {
     content: '""',
     position: 'absolute',
@@ -98,8 +129,9 @@ const FooterHeading = styled(Typography)(({ theme }) => ({
 
 const FooterDescription = styled(Typography)(({ theme }) => ({
   marginBottom: '20px',
-  color: '#ddd',
+  color: '#f5f5f5',
   lineHeight: 1.6,
+  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)'
 }));
 
 const SocialLinks = styled(Box)(({ theme }) => ({
@@ -134,7 +166,7 @@ const FooterLinks = styled(Box)(({ theme }) => ({
 }));
 
 const FooterLink = styled(Box)(({ theme }) => ({
-  color: '#ddd',
+  color: '#f5f5f5',
   textDecoration: 'none',
   transition: 'all 0.3s',
   position: 'relative',
@@ -142,18 +174,21 @@ const FooterLink = styled(Box)(({ theme }) => ({
   fontSize: '1rem',
   cursor: 'pointer',
   display: 'block',
+  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)',
   '&::before': {
     content: '"›"',
     position: 'absolute',
     left: 0,
     color: '#ffd100',
     fontWeight: 'bold',
+    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
   },
   '&:hover': {
     color: '#ffd100',
     transform: 'translateX(3px)',
     paddingLeft: '18px',
     textDecoration: 'none',
+    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
   },
 }));
 

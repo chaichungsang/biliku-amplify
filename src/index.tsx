@@ -38,7 +38,7 @@ const theme = createTheme({
       light: '#ffdc33',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#faf8f5', // Light cream base
       paper: '#ffffff',
     },
     text: {
