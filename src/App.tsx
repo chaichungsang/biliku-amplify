@@ -24,6 +24,7 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import CookiePage from './pages/CookiePage';
 import MyListingsPage from './pages/MyListingsPage';
+import AddListingPage from './pages/AddListingPage';
 
 // Amplify UI Theme
 import '@aws-amplify/ui-react/styles.css';
@@ -112,6 +113,16 @@ function App() {
               <Authenticator.Provider>
                 <Authenticator>
                   <MyListingsPage />
+                </Authenticator>
+              </Authenticator.Provider>
+            } 
+          />
+          <Route 
+            path="/add-listing" 
+            element={
+              <Authenticator.Provider>
+                <Authenticator>
+                  <AddListingPage />
                 </Authenticator>
               </Authenticator.Provider>
             } 

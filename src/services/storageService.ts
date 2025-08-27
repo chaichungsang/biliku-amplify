@@ -296,7 +296,7 @@ export class StorageService implements StorageServiceInterface {
     
     // Default validation rules for images
     const rules: FileValidationRules = {
-      maxSize: 10 * 1024 * 1024, // 10MB
+      maxSize: 5 * 1024 * 1024, // 5MB for property listings
       allowedTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/heic', 'image/heif']
     };
 

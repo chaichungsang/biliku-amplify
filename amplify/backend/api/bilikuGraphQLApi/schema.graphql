@@ -1,9 +1,371 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+# Biliku Room Rental Platform - GraphQL Schema
+# This schema defines the data models for the Sarawak room rental platform
+
+# Global authorization rule for development - replace with proper auth in production
 input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type Todo @model {
+# User Profile - Extended user information beyond AWS Cognito
+type UserProfile @model @auth(rules: [
+  { allow: owner, ownerField: "cognitoId" },
+  { allow: public, operations: [read] }
+]) {
+  id: ID!
+  cognitoId: String! @index(name: "byCognitoId", queryField: "getUserProfileByCognito")
+  email: String!
+  firstName: String!
+  lastName: String!
+  phone: String
+  gender: String # male, female, other
+  userType: String! # TENANT, LANDLORD, AGENT
+  profilePicture: String
+  dateOfBirth: AWSDate
+  occupation: String
+  emergencyContact: String
+  emailConfirmed: Boolean!
+  isActive: Boolean!
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  
+  # Relationships
+  listings: [RoomListing] @hasMany(indexName: "byOwner", fields: ["id"])
+  favorites: [Favorite] @hasMany(indexName: "byUser", fields: ["id"])
+  agreements: [RentalAgreement] @hasMany(indexName: "byTenant", fields: ["id"])
+  landlordAgreements: [RentalAgreement] @hasMany(indexName: "byLandlord", fields: ["id"])
+  reviews: [Review] @hasMany(indexName: "byReviewer", fields: ["id"])
+  inquiriesSent: [Inquiry] @hasMany(indexName: "byInquirer", fields: ["id"])
+  inquiriesReceived: [Inquiry] @hasMany(indexName: "byRecipient", fields: ["id"])
+  notifications: [Notification] @hasMany(indexName: "byUser", fields: ["id"])
+}
+
+# Room Listings - Property listings for rent
+type RoomListing @model @auth(rules: [
+  { allow: owner, ownerField: "ownerId" },
+  { allow: public, operations: [read] }
+]) {
+  id: ID!
+  ownerId: ID! @index(name: "byOwner", queryField: "getListingsByOwner")
+  
+  # Basic Information
+  title: String!
+  description: String
+  price: Float!
+  currency: String! # MYR
+  roomType: String! # single_room, master_bedroom, middle_room, small_room, studio_unit, entire_house
+  
+  # Location Details
+  address: String!
+  city: String!
+  state: String! # Sarawak
+  location: String # Area/District
+  postalCode: String
+  latitude: Float
+  longitude: Float
+  
+  # Property Details
+  propertyType: String # apartment, house, condominium, townhouse
+  furnished: String # fully_furnished, partially_furnished, unfurnished
+  bathrooms: Int
+  bedrooms: Int
+  squareFeet: Float
+  floorLevel: String
+  
+  # Availability
+  availableFrom: AWSDate
+  availableTo: AWSDate
+  isAvailable: Boolean!
+  isActive: Boolean!
+  
+  # Rules & Preferences
+  genderPreference: String # male, female, any
+  smokingAllowed: Boolean!
+  petsAllowed: Boolean!
+  visitorsAllowed: Boolean!
+  religionPreference: String
+  agePreference: String # students, working_professionals, any
+  
+  # Media & Documents
+  images: [String!]!
+  mainImageIndex: Int
+  virtualTourUrl: String
+  floorPlanUrl: String
+  
+  # Additional Information
+  amenities: [String!]!
+  nearbyFacilities: [String!]
+  utilitiesIncluded: [String!]
+  additionalRules: [String!]
+  
+  # Rental Terms
+  securityDeposit: Float
+  advancePayment: Int # Number of months
+  minimumStay: Int # Months
+  noticePeriod: Int # Days
+  
+  # Statistics
+  viewCount: Int
+  favoriteCount: Int
+  inquiryCount: Int
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  featuredUntil: AWSDateTime
+  
+  # Relationships
+  owner: UserProfile @belongsTo(fields: ["ownerId"])
+  favorites: [Favorite] @hasMany(indexName: "byListing", fields: ["id"])
+  agreements: [RentalAgreement] @hasMany(indexName: "byListing", fields: ["id"])
+  reviews: [Review] @hasMany(indexName: "byListing", fields: ["id"])
+  inquiries: [Inquiry] @hasMany(indexName: "byListing", fields: ["id"])
+}
+
+# User Favorites - Saved listings
+type Favorite @model @auth(rules: [
+  { allow: owner, ownerField: "userId" }
+]) {
+  id: ID!
+  userId: ID! @index(name: "byUser", queryField: "getFavoritesByUser")
+  listingId: ID! @index(name: "byListing", queryField: "getFavoritesByListing")
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  
+  # Relationships
+  user: UserProfile @belongsTo(fields: ["userId"])
+  listing: RoomListing @belongsTo(fields: ["listingId"])
+}
+
+# Rental Agreements - Legal agreements between landlords and tenants
+type RentalAgreement @model @auth(rules: [
+  { allow: owner, ownerField: "tenantId" },
+  { allow: owner, ownerField: "landlordId" },
+  { allow: public, operations: [read] }
+]) {
+  id: ID!
+  agreementId: String!
+  listingId: ID! @index(name: "byListing", queryField: "getAgreementsByListing")
+  landlordId: ID! @index(name: "byLandlord", queryField: "getAgreementsByLandlord")
+  tenantId: ID! @index(name: "byTenant", queryField: "getAgreementsByTenant")
+  
+  # Property Details
+  propertyTitle: String!
+  propertyAddress: String!
+  propertyType: String!
+  
+  # Rental Terms
+  monthlyRent: Float!
+  securityDeposit: Float!
+  advancePayment: Int! # Number of months paid in advance
+  
+  # Tenancy Period
+  startDate: AWSDate!
+  endDate: AWSDate!
+  durationMonths: Int!
+  noticePeriodDays: Int!
+  
+  # Terms & Conditions
+  utilitiesIncluded: [String!]!
+  petPolicy: String! # not_allowed, cats_only, small_pets, allowed
+  smokingPolicy: String! # not_allowed, designated_area, allowed
+  guestPolicy: String! # not_allowed, limited, approval_required, allowed
+  maintenanceResponsibility: String! # tenant_all, tenant_minor_landlord_major, landlord_all, shared
+  additionalClauses: [String!]
+  
+  # Agreement Status & Signatures
+  status: String! # draft, pending_signatures, active, completed, terminated
+  landlordSignature: String
+  tenantSignature: String
+  landlordSignedAt: AWSDateTime
+  tenantSignedAt: AWSDateTime
+  fullySignedAt: AWSDateTime
+  
+  # Document Management
+  documentHtml: String
+  documentPdfUrl: String
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  
+  # Relationships
+  listing: RoomListing @belongsTo(fields: ["listingId"])
+  landlord: UserProfile @belongsTo(fields: ["landlordId"])
+  tenant: UserProfile @belongsTo(fields: ["tenantId"])
+}
+
+# Reviews & Ratings - User feedback system
+type Review @model @auth(rules: [
+  { allow: owner, ownerField: "reviewerId" },
+  { allow: public, operations: [read] }
+]) {
+  id: ID!
+  listingId: ID! @index(name: "byListing", queryField: "getReviewsByListing")
+  reviewerId: ID! @index(name: "byReviewer", queryField: "getReviewsByUser")
+  
+  # Review Content
+  rating: Int! # 1-5 stars
+  title: String
+  comment: String
+  
+  # Detailed Ratings
+  cleanlinessRating: Int
+  locationRating: Int
+  valueRating: Int
+  communicationRating: Int
+  amenitiesRating: Int
+  
+  # Review Metadata
+  isVerifiedStay: Boolean! # Did the user actually stay here
+  stayPeriod: String # e.g., "6 months", "1 year"
+  recommendToFriends: Boolean
+  
+  # Moderation
+  isApproved: Boolean!
+  moderationNotes: String
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  
+  # Relationships
+  listing: RoomListing @belongsTo(fields: ["listingId"])
+  reviewer: UserProfile @belongsTo(fields: ["reviewerId"])
+}
+
+# Inquiries - Messages between potential tenants and landlords
+type Inquiry @model @auth(rules: [
+  { allow: owner, ownerField: "inquirerId" },
+  { allow: owner, ownerField: "recipientId" }
+]) {
+  id: ID!
+  listingId: ID! @index(name: "byListing", queryField: "getInquiriesByListing")
+  inquirerId: ID! @index(name: "byInquirer", queryField: "getInquiriesByUser")
+  recipientId: ID! @index(name: "byRecipient", queryField: "getInquiriesReceived")
+  
+  # Inquiry Content
+  subject: String!
+  message: String!
+  inquiryType: String! # general, viewing_request, rental_application, complaint
+  
+  # Contact Information
+  preferredContactMethod: String # email, phone, whatsapp
+  phoneNumber: String
+  
+  # Viewing Details (if viewing_request)
+  preferredViewingDates: [String!]
+  viewingTimePreference: String
+  numberOfPeople: Int
+  
+  # Status
+  status: String! # new, read, replied, closed
+  priority: String # low, normal, high, urgent
+  
+  # Response
+  response: String
+  respondedAt: AWSDateTime
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  
+  # Relationships
+  listing: RoomListing @belongsTo(fields: ["listingId"])
+  inquirer: UserProfile @belongsTo(fields: ["inquirerId"])
+  recipient: UserProfile @belongsTo(fields: ["recipientId"])
+}
+
+# Amenities - Reusable amenity definitions
+type Amenity @model @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String!
+  category: String! # basic, kitchen, bathroom, recreation, safety, connectivity, transport
+  icon: String
   description: String
+  isActive: Boolean!
+  sortOrder: Int
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Cities & Areas - Location data for Sarawak
+type City @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  state: String! # Sarawak
+  postcode: String
+  latitude: Float
+  longitude: Float
+  isActive: Boolean!
+  
+  # Area/District information
+  districts: [String!]
+  popularAreas: [String!]
+  
+  # Statistics
+  listingCount: Int
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Notifications - User notification system
+type Notification @model @auth(rules: [
+  { allow: owner, ownerField: "userId" }
+]) {
+  id: ID!
+  userId: ID! @index(name: "byUser", queryField: "getNotificationsByUser")
+  
+  # Notification Content
+  title: String!
+  message: String!
+  type: String! # inquiry, agreement, review, system, promotion
+  
+  # Related Entity
+  relatedEntityType: String # listing, agreement, review, user
+  relatedEntityId: ID
+  
+  # Status
+  isRead: Boolean!
+  readAt: AWSDateTime
+  
+  # Action
+  actionUrl: String
+  actionText: String
+  
+  # Timestamps
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  expiresAt: AWSDateTime
+  
+  # Relationships
+  user: UserProfile @belongsTo(fields: ["userId"])
+}
+
+# System Logs - For admin monitoring and debugging
+type SystemLog @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  
+  # Log Details
+  level: String! # info, warning, error, debug
+  source: String! # frontend, backend, amplify
+  message: String!
+  
+  # Context
+  userId: ID
+  entityType: String
+  entityId: ID
+  userAgent: String
+  ipAddress: String
+  
+  # Error Details
+  errorCode: String
+  stackTrace: String
+  
+  # Timestamps
+  createdAt: AWSDateTime!
 }

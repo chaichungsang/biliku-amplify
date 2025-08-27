@@ -113,6 +113,63 @@ export interface SortControlsProps {
   disabled?: boolean;
 }
 
+// Form data interface (moved from AddListingPage to avoid circular imports)
+export interface ListingFormData {
+  // Basic Information
+  title: string;
+  description: string;
+  price: number;
+  roomType: string;
+  propertyType: string;
+  
+  // Location Details
+  address: string;
+  city: string;
+  neighborhood: string;
+  landmarks: string[];
+  latitude?: number;
+  longitude?: number;
+  
+  // Property Specifications
+  furnished: string;
+  bedrooms: number;
+  bathrooms: number;
+  squareFeet?: number;
+  floorLevel: string;
+  buildingYear?: number;
+  
+  // Amenities & Features
+  amenities: string[];
+  securityFeatures: string[];
+  parking: string;
+  kitchenFacilities: string[];
+  additionalFacilities: string[];
+  
+  // Rental Terms
+  availableFrom: string;
+  minimumStay: number;
+  deposit: number;
+  advancePayment: number;
+  utilityDeposits: {
+    electricity: number;
+    water: number;
+    internet: number;
+  };
+  genderPreference: string;
+  smokingAllowed: boolean;
+  petsAllowed: boolean;
+  
+  // Photo Upload
+  images: File[];
+  mainImageIndex: number;
+  
+  // Contact & Availability
+  contactMethods: string[];
+  viewingAvailability: string[];
+  responseTime: string;
+  additionalNotes: string;
+}
+
 // Service interfaces
 export interface ListingServiceInterface {
   getListings: (params?: ListingFilters & { page?: number; limit?: number; nextToken?: string }) => Promise<ListingsResponse>;
@@ -121,15 +178,18 @@ export interface ListingServiceInterface {
   searchListings: (query: string) => Promise<RoomListing[]>;
   getMyListings: () => Promise<RoomListing[]>;
   createListing: (listingData: CreateListingData) => Promise<RoomListing>;
+  createListingFromForm: (formData: ListingFormData) => Promise<RoomListing>;
   updateListing: (id: string, listingData: UpdateListingData) => Promise<RoomListing>;
+  updateListingFromForm: (id: string, formData: Partial<ListingFormData>) => Promise<RoomListing>;
+  saveDraftListing: (formData: Partial<ListingFormData>) => Promise<RoomListing>;
   deleteListing: (id: string) => Promise<boolean>;
   toggleListingStatus: (id: string) => Promise<RoomListing>;
   getRelatedListings: (id: string) => Promise<RoomListing[]>;
-  addFavorite: (roomId: string) => Promise<any>;
+  addFavorite: (listingId: string) => Promise<any>;
   removeFavorite: (favoriteId: string) => Promise<boolean>;
   getFavorites: () => Promise<any[]>;
-  isFavorite: (roomId: string) => Promise<boolean>;
-  toggleFavorite: (roomId: string) => Promise<boolean>;
+  isFavorite: (listingId: string) => Promise<boolean>;
+  toggleFavorite: (listingId: string) => Promise<boolean>;
 }
 
 // Favorite types
