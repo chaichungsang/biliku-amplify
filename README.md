@@ -1,70 +1,133 @@
-# Getting Started with Create React App
+# Biliku React - Room Rental Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React application for room rentals in Sarawak, built with AWS Amplify, Material-UI, and TypeScript.
 
-## Available Scripts
+## ✨ Features
 
-In the project directory, you can run:
+- **Clean Architecture**: Built with React 18, TypeScript, and modern development practices
+- **AWS Amplify Integration**: Authentication, GraphQL API, and S3 storage
+- **Material-UI Design**: Modern, responsive UI with Material Design
+- **State Management**: Zustand for client state, React Query for server state
+- **Build System**: Vite for fast development and optimized production builds
 
-### `npm start`
+## 🚀 Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React 18, TypeScript, Material-UI v5
+- **Authentication**: AWS Amplify Auth with Cognito
+- **API**: AWS AppSync GraphQL
+- **Storage**: AWS S3
+- **State**: Zustand + React Query
+- **Build**: Vite
+- **Deployment**: AWS Amplify Hosting
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📦 Installation
 
-### `npm test`
+```bash
+# Install dependencies
+npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Start development server
+npm run dev
 
-### `npm run build`
+# Build for production
+npm run build
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Preview production build
+npm run preview
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🏗️ Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── components/          # Reusable UI components
+│   └── layout/         # Layout components (Header, Footer)
+├── pages/              # Page components
+├── hooks/              # Custom React hooks
+├── stores/             # Zustand stores
+├── services/           # API services
+├── types/              # TypeScript type definitions
+├── utils/              # Utility functions
+└── assets/             # Static assets
+```
 
-### `npm run eject`
+## 🔧 Development
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Prerequisites
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Node.js 18+
+- AWS CLI configured
+- Amplify CLI installed
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Environment Setup
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Copy environment template:
+```bash
+cp .env.example .env
+```
 
-## Learn More
+2. Configure your AWS Amplify settings in `.env`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Available Scripts
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm test` - Run tests
 
-### Code Splitting
+## 🔐 Authentication
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The app uses AWS Amplify Auth with:
+- Email/password authentication
+- Google social login
+- User attributes: email, name, gender, phone
 
-### Analyzing the Bundle Size
+## 📱 Pages
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Home**: Landing page with features
+- **Listings**: Room listings grid
+- **Room Details**: Detailed room view
+- **Profile**: User profile and account management
+- **Login**: Authentication flow
 
-### Making a Progressive Web App
+## 🚀 Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The app is configured for AWS Amplify hosting:
 
-### Advanced Configuration
+1. Connect your repository to AWS Amplify
+2. The `amplify.yml` file configures the build process
+3. Automatic deployments on push to main branch
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 🧪 Testing
 
-### Deployment
+```bash
+# Run tests
+npm test
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+# Run tests with coverage
+npm run test:coverage
+```
 
-### `npm run build` fails to minify
+## 📚 Documentation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [AWS Amplify Documentation](https://docs.amplify.aws/)
+- [Material-UI Documentation](https://mui.com/)
+- [React Query Documentation](https://tanstack.com/query/)
+- [Zustand Documentation](https://zustand-demo.pmnd.rs/)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For support, create an issue in the repository or contact the development team.

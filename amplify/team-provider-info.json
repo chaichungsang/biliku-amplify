@@ -1,0 +1,23 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-biliku-staging-bf22e-authRole",
+      "UnauthRoleArn": "arn:aws:iam::064474601135:role/amplify-biliku-staging-bf22e-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::064474601135:role/amplify-biliku-staging-bf22e-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-biliku-staging-bf22e-deployment",
+      "UnauthRoleName": "amplify-biliku-staging-bf22e-unauthRole",
+      "StackName": "amplify-biliku-staging-bf22e",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:064474601135:stack/amplify-biliku-staging-bf22e/cd5dd1e0-82fd-11f0-814d-0a6bc0dd71c5",
+      "AmplifyAppId": "d22vqp76irh5yz"
+    },
+    "categories": {
+      "auth": {
+        "Biliku": {}
+      },
+      "storage": {
+        "s3bilikuroomimage": {}
+      }
+    }
+  }
+}

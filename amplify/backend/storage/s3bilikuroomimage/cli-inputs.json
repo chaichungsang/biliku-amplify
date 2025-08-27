@@ -1,0 +1,14 @@
+{
+  "resourceName": "s3bilikuroomimage",
+  "bucketName": "biliku-room-image",
+  "policyUUID": "8ba73b18",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
