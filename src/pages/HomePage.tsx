@@ -131,8 +131,14 @@ const SearchContainer = styled(Box)(({ theme }) => ({
     )
   `,
   borderRadius: '16px',
-  padding: '35px',
-  maxWidth: '1000px',
+  padding: '20px',
+  [theme.breakpoints.up('sm')]: {
+    padding: '30px',
+  },
+  [theme.breakpoints.up('md')]: {
+    padding: '35px',
+  },
+  maxWidth: '1100px',
   margin: '0 auto',
   boxShadow: '0 12px 40px rgba(204, 0, 1, 0.08), 0 6px 20px rgba(255, 209, 0, 0.12)',
   border: '2px solid rgba(255, 209, 0, 0.4)',
@@ -186,12 +192,13 @@ const GenderButton = styled(Button, {
   padding: '8px 12px',
   border: '1px solid #ddd',
   borderRadius: '6px',
-  backgroundColor: active ? '#4a6fa5' : 'white',
-  color: active ? 'white' : '#666',
+  backgroundColor: active ? '#cc0001' : 'white',
+  color: active ? 'white' : '#333',
   cursor: 'pointer',
   fontSize: '0.9rem',
   '&:hover': {
-    backgroundColor: active ? '#4a6fa5' : '#f5f5f5',
+    backgroundColor: active ? '#b30001' : 'rgba(204, 0, 1, 0.05)',
+    borderColor: '#cc0001',
     transform: 'translateY(-1px)',
   },
 }));
@@ -201,17 +208,20 @@ const FeatureToggleButton = styled(Button, {
 })<{ active?: boolean }>(({ theme, active }) => ({
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: active ? '#4a6fa5' : '#f5f5f5',
-  border: '1px solid #ddd',
-  borderRadius: '4px',
-  padding: '4px 10px',
-  fontSize: '0.75rem',
+  backgroundColor: active ? '#cc0001' : 'white',
+  border: active ? '2px solid #cc0001' : '1px solid rgba(204, 0, 1, 0.2)',
+  borderRadius: '8px',
+  padding: '6px 12px',
+  fontSize: '0.8rem',
   cursor: 'pointer',
-  color: active ? 'white' : '#555',
+  color: active ? 'white' : '#333',
+  fontWeight: active ? 600 : 500,
   whiteSpace: 'nowrap',
+  transition: 'all 0.2s ease',
   '&:hover': {
-    backgroundColor: active ? '#4a6fa5' : '#e8e8e8',
-    borderColor: active ? '#4a6fa5' : '#ccc',
+    backgroundColor: active ? '#b30001' : 'rgba(204, 0, 1, 0.08)',
+    borderColor: '#cc0001',
+    transform: 'translateY(-1px)',
   },
 }));
 
@@ -592,24 +602,49 @@ const HomePage: React.FC = () => {
           {/* Search Container */}
           <SearchContainer>
             {/* Address Search */}
-            <Box sx={{ marginBottom: '20px' }}>
+            <Box sx={{ marginBottom: '24px' }}>
               <TextField
                 fullWidth
                 label="Search by Address or Keyword"
                 placeholder="Enter address, area or keywords..."
                 value={searchFilters.searchQuery}
                 onChange={(e) => handleInputChange('searchQuery', e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <SearchIcon sx={{ color: '#666', marginRight: '8px' }} />
+                  ),
+                }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     backgroundColor: 'white',
+                    borderRadius: '12px',
+                    fontSize: { xs: '0.95rem', sm: '1rem' },
+                    paddingLeft: '4px',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'rgba(204, 0, 1, 0.5)',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: '#cc0001',
+                        borderWidth: '2px',
+                      },
+                    },
+                  },
+                  '& .MuiInputLabel-root': {
+                    fontSize: { xs: '0.9rem', sm: '1rem' },
+                    '&.Mui-focused': {
+                      color: '#cc0001',
+                    },
                   },
                 }}
               />
             </Box>
 
-            {/* Search Fields Row 1 */}
-            <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
-              <Grid item xs={12} sm={6} md={3}>
+            {/* Search Fields Row 1 - Location and Property Details */}
+            <Grid container spacing={3} sx={{ marginBottom: '24px' }}>
+              <Grid item xs={12} sm={6} md={4}>
                 <FormControl fullWidth>
                   <InputLabel>City</InputLabel>
                   <Select
@@ -626,7 +661,7 @@ const HomePage: React.FC = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={4}>
                 <FormControl fullWidth>
                   <InputLabel>Room Type</InputLabel>
                   <Select
@@ -645,12 +680,43 @@ const HomePage: React.FC = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid item xs={12} sm={12} md={4}>
+                <FormControl fullWidth>
+                  <InputLabel>Religion</InputLabel>
+                  <Select
+                    name="religionPreference"
+                    value={searchFilters.religionPreference}
+                    onChange={handleSelectChange}
+                    label="Religion"
+                    sx={{ backgroundColor: 'white' }}
+                  >
+                    <MenuItem value="">No Preference</MenuItem>
+                    {religions.map((religion) => (
+                      <MenuItem key={religion} value={religion.toLowerCase()}>
+                        {religion}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+
+            {/* Search Fields Row 2 - Preferences and Details */}
+            <Grid container spacing={3} sx={{ marginBottom: '24px' }}>
+              <Grid item xs={12} sm={6} md={6}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
+                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '12px', fontWeight: 600 }}>
                     Gender Preference
                   </Typography>
-                  <Box sx={{ display: 'flex', gap: '8px', backgroundColor: 'rgba(204, 0, 1, 0.05)', padding: '4px', borderRadius: '8px', border: '1px solid rgba(255, 209, 0, 0.3)' }}>
+                  <Box sx={{ 
+                    display: 'flex', 
+                    gap: { xs: '6px', sm: '8px' }, 
+                    backgroundColor: 'rgba(204, 0, 1, 0.05)', 
+                    padding: { xs: '6px', sm: '8px' }, 
+                    borderRadius: '12px', 
+                    border: '1px solid rgba(255, 209, 0, 0.3)',
+                    flexWrap: 'wrap'
+                  }}>
                     <GenderButton
                       active={searchFilters.genderPreference === ''}
                       onClick={() => handleInputChange('genderPreference', '')}
@@ -675,61 +741,47 @@ const HomePage: React.FC = () => {
                   </Box>
                 </Box>
               </Grid>
-            </Grid>
-
-            {/* Search Fields Row 2 */}
-            <Grid container spacing={2} sx={{ marginBottom: '20px' }}>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={3}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
+                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '12px', fontWeight: 600 }}>
                     Price Range (RM)
                   </Typography>
-                  <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <Box sx={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <TextField
+                      size="small"
                       type="number"
                       placeholder="Min"
                       value={searchFilters.minPrice}
                       onChange={(e) => handleInputChange('minPrice', e.target.value)}
-                      sx={{ '& .MuiOutlinedInput-root': { backgroundColor: 'white' } }}
+                      sx={{ 
+                        flex: 1,
+                        '& .MuiOutlinedInput-root': { backgroundColor: 'white' }
+                      }}
                       inputProps={{ min: 0 }}
                     />
-                    <Typography sx={{ color: '#666', fontWeight: 'bold' }}>-</Typography>
+                    <Typography sx={{ color: '#666', fontWeight: 'bold', minWidth: '12px', textAlign: 'center' }}>-</Typography>
                     <TextField
+                      size="small"
                       type="number"
                       placeholder="Max"
                       value={searchFilters.maxPrice}
                       onChange={(e) => handleInputChange('maxPrice', e.target.value)}
-                      sx={{ '& .MuiOutlinedInput-root': { backgroundColor: 'white' } }}
+                      sx={{ 
+                        flex: 1,
+                        '& .MuiOutlinedInput-root': { backgroundColor: 'white' }
+                      }}
                       inputProps={{ min: 0 }}
                     />
                   </Box>
                 </Box>
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <FormControl fullWidth>
-                  <InputLabel>Religion</InputLabel>
-                  <Select
-                    name="religionPreference"
-                    value={searchFilters.religionPreference}
-                    onChange={handleSelectChange}
-                    label="Religion"
-                    sx={{ backgroundColor: 'white' }}
-                  >
-                    <MenuItem value="">No Preference</MenuItem>
-                    {religions.map((religion) => (
-                      <MenuItem key={religion} value={religion.toLowerCase()}>
-                        {religion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={12} md={4}>
+              <Grid item xs={12} sm={12} md={3}>
                 <Box>
-                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
+                  <Typography variant="body2" sx={{ color: '#333', marginBottom: '12px', fontWeight: 600 }}>
                     Available From
                   </Typography>
                   <TextField
+                    size="small"
                     type="date"
                     value={searchFilters.availableFrom}
                     onChange={(e) => handleInputChange('availableFrom', e.target.value)}
@@ -744,11 +796,19 @@ const HomePage: React.FC = () => {
             </Grid>
 
             {/* Features & Amenities */}
-            <Box sx={{ marginBottom: '20px' }}>
-              <Typography variant="body2" sx={{ color: '#333', marginBottom: '8px', fontWeight: 600 }}>
+            <Box sx={{ marginBottom: '24px' }}>
+              <Typography variant="body2" sx={{ color: '#333', marginBottom: '12px', fontWeight: 600 }}>
                 Features & Amenities
               </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+              <Box sx={{ 
+                display: 'flex', 
+                flexWrap: 'wrap', 
+                gap: { xs: '6px', sm: '8px' },
+                backgroundColor: 'rgba(255, 209, 0, 0.08)',
+                padding: { xs: '12px', sm: '16px' },
+                borderRadius: '12px',
+                border: '1px solid rgba(204, 0, 1, 0.15)'
+              }}>
                 <FeatureToggleButton
                   active={searchFilters.isPetFriendly}
                   onClick={() => handleInputChange('isPetFriendly', !searchFilters.isPetFriendly)}
@@ -774,13 +834,25 @@ const HomePage: React.FC = () => {
             </Box>
 
             {/* Search Button */}
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '25px' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
               <SearchButton
                 onClick={searchProperties}
                 disabled={!hasSearchCriteria}
+                sx={{
+                  padding: { xs: '12px 32px', sm: '14px 40px' },
+                  fontSize: { xs: '1rem', sm: '1.1rem' },
+                  fontWeight: 600,
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(204, 0, 1, 0.3)',
+                  '&:hover': {
+                    boxShadow: '0 6px 20px rgba(204, 0, 1, 0.4)',
+                    transform: 'translateY(-2px)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
               >
-                <SearchIcon />
-                Search
+                <SearchIcon sx={{ marginRight: '8px' }} />
+                Search Properties
               </SearchButton>
             </Box>
           </SearchContainer>
