@@ -49,16 +49,12 @@ import { religions } from '../data/religions';
 const HeroSection = styled(Box)(({ theme }) => ({
   background: `
     linear-gradient(135deg, 
-      rgba(255, 248, 225, 0.98) 0%, 
-      rgba(255, 255, 255, 0.95) 15%,
-      rgba(255, 209, 0, 0.12) 30%,
-      rgba(255, 248, 225, 0.95) 50%,
-      rgba(204, 0, 1, 0.08) 70%,
-      rgba(255, 209, 0, 0.15) 85%,
-      rgba(255, 248, 225, 0.98) 100%
-    ),
-    radial-gradient(ellipse at top left, rgba(204, 0, 1, 0.08) 0%, transparent 60%),
-    radial-gradient(ellipse at bottom right, rgba(255, 209, 0, 0.12) 0%, transparent 65%)
+      rgba(255, 248, 225, 0.95) 0%, 
+      rgba(255, 255, 255, 0.90) 25%,
+      rgba(255, 248, 225, 0.92) 50%,
+      rgba(255, 255, 255, 0.88) 75%,
+      rgba(255, 248, 225, 0.95) 100%
+    )
   `,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
@@ -68,6 +64,7 @@ const HeroSection = styled(Box)(({ theme }) => ({
   padding: '80px 20px',
   borderBottom: '6px solid #ffd100',
   overflow: 'hidden',
+  // Songket-inspired diamond pattern layer
   '&::before': {
     content: '""',
     position: 'absolute',
@@ -76,11 +73,61 @@ const HeroSection = styled(Box)(({ theme }) => ({
     right: 0,
     bottom: 0,
     backgroundImage: `
-      linear-gradient(45deg, transparent 48%, rgba(255, 209, 0, 0.04) 50%, transparent 52%),
-      linear-gradient(-45deg, transparent 48%, rgba(204, 0, 1, 0.02) 50%, transparent 52%)
+      radial-gradient(circle at 25% 25%, rgba(204, 0, 1, 0.08) 0%, transparent 12%),
+      radial-gradient(circle at 75% 75%, rgba(255, 209, 0, 0.10) 0%, transparent 12%),
+      radial-gradient(circle at 25% 75%, rgba(204, 0, 1, 0.06) 0%, transparent 10%),
+      radial-gradient(circle at 75% 25%, rgba(255, 209, 0, 0.08) 0%, transparent 10%)
     `,
-    backgroundSize: '60px 60px',
-    opacity: 0.5,
+    backgroundSize: '80px 80px',
+    opacity: 0.7,
+    pointerEvents: 'none'
+  },
+  // Traditional diamond weave pattern
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundImage: `
+      linear-gradient(45deg, 
+        transparent 20%, 
+        rgba(255, 209, 0, 0.05) 22%, 
+        rgba(255, 209, 0, 0.05) 28%, 
+        transparent 30%,
+        transparent 70%,
+        rgba(204, 0, 1, 0.04) 72%,
+        rgba(204, 0, 1, 0.04) 78%,
+        transparent 80%
+      ),
+      linear-gradient(-45deg, 
+        transparent 20%, 
+        rgba(255, 209, 0, 0.03) 22%, 
+        rgba(255, 209, 0, 0.03) 28%, 
+        transparent 30%,
+        transparent 70%,
+        rgba(204, 0, 1, 0.03) 72%,
+        rgba(204, 0, 1, 0.03) 78%,
+        transparent 80%
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 39px,
+        rgba(255, 248, 225, 0.6) 40px,
+        rgba(255, 248, 225, 0.6) 41px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 39px,
+        rgba(255, 248, 225, 0.4) 40px,
+        rgba(255, 248, 225, 0.4) 41px
+      )
+    `,
+    backgroundSize: '40px 40px, 40px 40px, 40px 40px, 40px 40px',
+    opacity: 0.6,
     pointerEvents: 'none'
   }
 }));
@@ -123,14 +170,14 @@ const HeroFreeBadge = styled(Box)(({ theme }) => ({
 const SearchContainer = styled(Box)(({ theme }) => ({
   background: `
     linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.98) 0%, 
-      rgba(255, 248, 225, 0.95) 25%,
-      rgba(255, 255, 255, 0.96) 50%,
-      rgba(255, 248, 225, 0.95) 75%,
-      rgba(255, 255, 255, 0.98) 100%
+      rgba(255, 255, 255, 0.96) 0%, 
+      rgba(255, 248, 225, 0.92) 25%,
+      rgba(255, 255, 255, 0.94) 50%,
+      rgba(255, 248, 225, 0.92) 75%,
+      rgba(255, 255, 255, 0.96) 100%
     )
   `,
-  borderRadius: '16px',
+  borderRadius: '18px',
   padding: '20px',
   [theme.breakpoints.up('sm')]: {
     padding: '30px',
@@ -140,19 +187,40 @@ const SearchContainer = styled(Box)(({ theme }) => ({
   },
   maxWidth: '1100px',
   margin: '0 auto',
-  boxShadow: '0 12px 40px rgba(204, 0, 1, 0.08), 0 6px 20px rgba(255, 209, 0, 0.12)',
-  border: '2px solid rgba(255, 209, 0, 0.4)',
+  boxShadow: '0 16px 50px rgba(204, 0, 1, 0.12), 0 8px 25px rgba(255, 209, 0, 0.15), 0 4px 15px rgba(0, 0, 0, 0.08)',
+  border: '3px solid rgba(255, 209, 0, 0.5)',
   position: 'relative',
-  backdropFilter: 'blur(8px)',
+  backdropFilter: 'blur(12px)',
+  // Enhanced border with traditional pattern
   '&::before': {
     content: '""',
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: '4px',
-    background: 'linear-gradient(to right, #cc0001 0%, #cc0001 33%, rgba(0, 0, 0, 0.8) 33%, rgba(0, 0, 0, 0.8) 66%, #ffd100 66%, #ffd100 100%)',
-    borderRadius: '16px 16px 0 0'
+    height: '6px',
+    background: `
+      linear-gradient(to right, 
+        #cc0001 0%, #cc0001 30%, 
+        rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 0.8) 35%,
+        #ffd100 35%, #ffd100 65%,
+        rgba(0, 0, 0, 0.8) 65%, rgba(0, 0, 0, 0.8) 70%,
+        #cc0001 70%, #cc0001 100%
+      )
+    `,
+    borderRadius: '18px 18px 0 0'
+  },
+  // Subtle inner shadow for depth
+  '&::after': {
+    content: '""',
+    position: 'absolute',
+    top: 6,
+    left: 3,
+    right: 3,
+    bottom: 3,
+    border: '1px solid rgba(255, 255, 255, 0.6)',
+    borderRadius: '15px',
+    pointerEvents: 'none'
   }
 }));
 
