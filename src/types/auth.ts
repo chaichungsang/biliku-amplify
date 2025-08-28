@@ -7,7 +7,6 @@ export interface User {
   lastName: string;
   phone?: string;
   gender?: 'male' | 'female' | 'other';
-  userType?: 'tenant' | 'landlord' | 'agent' | 'admin';
   status?: 'active' | 'inactive' | 'pending' | 'suspended';
   isVip?: boolean;
   emailConfirmed: boolean;
@@ -28,7 +27,6 @@ export interface RegisterData {
   lastName: string;
   phone?: string;
   gender?: 'male' | 'female' | 'other';
-  userType?: 'tenant' | 'landlord';
 }
 
 export interface UpdateProfileData {

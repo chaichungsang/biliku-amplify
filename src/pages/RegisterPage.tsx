@@ -261,7 +261,6 @@ interface RegisterFormData {
   lastName: string;
   phone: string;
   gender: string;
-  userType: string;
   agreeToTerms: boolean;
 }
 
@@ -280,7 +279,6 @@ const RegisterPage: React.FC = () => {
     lastName: '',
     phone: '',
     gender: '',
-    userType: 'tenant',
     agreeToTerms: false,
   });
   
@@ -384,7 +382,6 @@ const RegisterPage: React.FC = () => {
               ? `+${formData.phone.replace(/\D/g, '')}` 
               : `+60${formData.phone.replace(/\D/g, '')}`,
             gender: formData.gender,
-            'custom:user_type': formData.userType,
           },
           autoSignIn: false, // We'll handle verification first
         },
@@ -572,18 +569,6 @@ const RegisterPage: React.FC = () => {
                 </Select>
               </StyledFormControl>
 
-              <StyledFormControl fullWidth margin="normal">
-                <InputLabel>I am a</InputLabel>
-                <Select
-                  value={formData.userType}
-                  onChange={handleSelectChange('userType')}
-                  label="I am a"
-                  required
-                >
-                  <MenuItem value="tenant">Tenant (Looking for rooms)</MenuItem>
-                  <MenuItem value="landlord">Landlord (Renting out rooms)</MenuItem>
-                </Select>
-              </StyledFormControl>
             </Box>
 
             <FormControlLabel

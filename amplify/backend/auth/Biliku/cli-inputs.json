@@ -30,6 +30,7 @@
       "phone_number",
       "name"
     ],
+    "customAttributes": [],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
