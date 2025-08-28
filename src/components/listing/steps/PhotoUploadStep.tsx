@@ -71,7 +71,7 @@ import {
   Error as ErrorIcon,
   Close as CloseIcon
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 import { storageService } from '../../../services/storageService';
 import { useAuth } from '../../../hooks/useAuth';
 
@@ -156,7 +156,7 @@ const PhotoUploadStep: React.FC<PhotoUploadStepProps> = ({ data, errors, onChang
   // Initialize photos from existing data
   useEffect(() => {
     if (data.images && data.images.length > 0) {
-      const existingPhotos = data.images.map((file, index) => ({
+      const existingPhotos = data.images.map((file: File, index: number) => ({
         id: `existing-${index}`,
         file,
         preview: URL.createObjectURL(file),
@@ -182,7 +182,7 @@ const PhotoUploadStep: React.FC<PhotoUploadStepProps> = ({ data, errors, onChang
   // Handle file upload to S3
   const uploadToS3 = useCallback(async (photo: PhotoUpload): Promise<string> => {
     try {
-      if (!user?.userId) {
+      if (!user?.id) {
         throw new Error('User not authenticated');
       }
 
@@ -193,7 +193,7 @@ const PhotoUploadStep: React.FC<PhotoUploadStepProps> = ({ data, errors, onChang
       const s3Url = await storageService.uploadImage(
         compressedFile,
         'temp', // Will be moved to room folder when listing is created
-        user.userId,
+        user.id,
         {
           metadata: {
             originalName: photo.file.name,
@@ -733,7 +733,7 @@ const PhotoUploadStep: React.FC<PhotoUploadStepProps> = ({ data, errors, onChang
                   {/* Error Message */}
                   {photo.uploadStatus === 'error' && photo.error && (
                     <CardContent>
-                      <Alert severity="error" size="small">
+                      <Alert severity="error">
                         <Typography variant="caption">
                           {photo.error}
                         </Typography>

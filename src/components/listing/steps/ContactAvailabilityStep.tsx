@@ -34,7 +34,7 @@ import {
   PersonAdd as PersonAddIcon,
   AccessTime as AccessTimeIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface ContactAvailabilityStepProps {
   data: ListingFormData;
@@ -551,7 +551,7 @@ const ContactAvailabilityStep: React.FC<ContactAvailabilityStepProps> = ({ data,
         <Alert severity="info" sx={{ mt: 2 }}>
           <Typography variant="body2">
             <strong>Contact Summary:</strong> Tenants can reach you via{' '}
-            {data.contactMethods.map((method, index) => (
+            {data.contactMethods.map((method: string, index: number) => (
               <span key={method}>
                 {method === 'whatsapp' && 'WhatsApp'}
                 {method === 'phone' && 'Phone'}

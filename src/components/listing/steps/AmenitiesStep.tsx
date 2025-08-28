@@ -29,13 +29,13 @@ import {
   Lightbulb as LightIcon,
   Water as WaterIcon,
   RestaurantMenu as HalalIcon,
-  AutoAwesome as FanIcon,
+  Air as FanIcon,
   Videocam as CctvIcon,
   Gavel as GuardIcon,
   HomeWork as GatedIcon,
   Check as CheckIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface AmenitiesStepProps {
   data: ListingFormData;
@@ -89,7 +89,7 @@ const additionalFacilities = [
   { value: 'near-shops', label: 'Near Shopping Centers', icon: <StoreIcon />, description: 'Close to malls/shops' },
   { value: 'prayer-room', label: 'Prayer Room/Space', icon: <HalalIcon />, description: 'Religious facilities' },
   { value: 'study-area', label: 'Study/Common Area', icon: <LightIcon />, description: 'Shared study space' },
-  { value: 'balcony-view', label: 'Balcony with View', icon: <AutoAwesome />, description: 'Scenic balcony' },
+  { value: 'balcony-view', label: 'Balcony with View', icon: <LightIcon />, description: 'Scenic balcony' },
   { value: 'near-university', label: 'Near University', icon: <LightIcon />, description: 'Close to education' },
 ];
 
@@ -218,7 +218,7 @@ const AmenitiesStep: React.FC<AmenitiesStepProps> = ({ data, errors, onChange })
           fontSize: { xs: '1.5rem', md: '2rem' }
         }}
       >
-        <AutoAwesome />
+        <FanIcon />
         Amenities & Features
       </Typography>
       <Typography variant="body1" sx={{ color: '#666', mb: 4 }}>

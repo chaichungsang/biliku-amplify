@@ -32,7 +32,7 @@ import {
   Gavel as PolicyIcon,
   Info as InfoIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface RentalTermsStepProps {
   data: ListingFormData;

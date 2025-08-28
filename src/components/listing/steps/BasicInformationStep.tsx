@@ -19,7 +19,7 @@ import {
   AttachMoney as MoneyIcon,
   Description as DescriptionIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface BasicInformationStepProps {
   data: ListingFormData;

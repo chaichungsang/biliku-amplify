@@ -21,7 +21,7 @@ import {
   Straighten as SizeIcon,
   Apartment as ApartmentIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface PropertySpecsStepProps {
   data: ListingFormData;

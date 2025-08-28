@@ -461,42 +461,6 @@ export class ListingService implements ListingServiceInterface {
     }
   }
 
-  /**
-   * Get featured listings
-   */
-  async getFeaturedListings(): Promise<RoomListing[]> {
-    try {
-      const result = await this.getListings({ limit: 6 });
-      return result.data;
-    } catch (error: any) {
-      console.error('Error fetching featured listings:', error);
-      throw new Error(error.message || 'Failed to fetch featured listings');
-    }
-  }
-
-  /**
-   * Search listings
-   */
-  async searchListings(query: string): Promise<RoomListing[]> {
-    try {
-      // Use the search resolver if available, otherwise filter in memory
-      const result: GraphQLResult<any> = await this.client.graphql({
-        query: SEARCH_ROOMS,
-        variables: { query, limit: 50 }
-      });
-
-      if (result.errors) {
-        // Fallback to regular listing search with query filter
-        const listings = await this.getListings({ searchQuery: query, limit: 50 });
-        return listings.data;
-      }
-
-      return this.mapListingsFromGraphQL(result.data?.searchRooms?.items || []);
-    } catch (error: any) {
-      console.error('Error searching listings:', error);
-      throw new Error(error.message || 'Failed to search listings');
-    }
-  }
 
   /**
    * Get user's listings
@@ -873,7 +837,7 @@ export class ListingService implements ListingServiceInterface {
         variables: {
           input: {
             userId,
-            listingId,
+            roomId: listingId,
             createdAt: new Date().toISOString()
           }
         }
@@ -951,7 +915,7 @@ export class ListingService implements ListingServiceInterface {
         variables: {
           filter: {
             userId: { eq: userId },
-            listingId: { eq: listingId }
+            roomId: { eq: listingId }
           },
           limit: 1
         }
@@ -973,7 +937,7 @@ export class ListingService implements ListingServiceInterface {
       
       if (isFav) {
         const favorites = await this.getFavorites();
-        const favorite = favorites.find(fav => fav.listingId === listingId);
+        const favorite = favorites.find(fav => fav.roomId === listingId);
         if (favorite) {
           await this.removeFavorite(favorite.id);
         }

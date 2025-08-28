@@ -51,7 +51,7 @@ import {
   Visibility as PreviewIcon,
   SaveAlt as DraftIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface ReviewPublishStepProps {
   data: ListingFormData;
@@ -288,7 +288,7 @@ const ReviewPublishStep: React.FC<ReviewPublishStepProps> = ({ data, errors, onC
                         Nearby Landmarks:
                       </Typography>
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {data.landmarks.map((landmark, index) => (
+                        {data.landmarks.map((landmark: string, index: number) => (
                           <Chip key={index} label={landmark} size="small" variant="outlined" />
                         ))}
                       </Box>
@@ -359,7 +359,7 @@ const ReviewPublishStep: React.FC<ReviewPublishStepProps> = ({ data, errors, onC
                   <Grid item xs={12} sm={6}>
                     <Typography variant="body2" sx={{ color: '#666', mb: 1 }}>General Amenities</Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {data.amenities.map((amenity, index) => (
+                      {data.amenities.map((amenity: string, index: number) => (
                         <Chip key={index} label={amenity} size="small" />
                       ))}
                     </Box>
@@ -369,7 +369,7 @@ const ReviewPublishStep: React.FC<ReviewPublishStepProps> = ({ data, errors, onC
                   <Grid item xs={12} sm={6}>
                     <Typography variant="body2" sx={{ color: '#666', mb: 1 }}>Security Features</Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {data.securityFeatures.map((feature, index) => (
+                      {data.securityFeatures.map((feature: string, index: number) => (
                         <Chip key={index} label={feature} size="small" icon={<SecurityIcon />} />
                       ))}
                     </Box>
@@ -379,7 +379,7 @@ const ReviewPublishStep: React.FC<ReviewPublishStepProps> = ({ data, errors, onC
                   <Grid item xs={12} sm={6}>
                     <Typography variant="body2" sx={{ color: '#666', mb: 1 }}>Kitchen Facilities</Typography>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                      {data.kitchenFacilities.map((facility, index) => (
+                      {data.kitchenFacilities.map((facility: string, index: number) => (
                         <Chip key={index} label={facility} size="small" icon={<KitchenIcon />} />
                       ))}
                     </Box>
@@ -448,7 +448,7 @@ const ReviewPublishStep: React.FC<ReviewPublishStepProps> = ({ data, errors, onC
             <AccordionDetails>
               {data.images.length > 0 ? (
                 <ImageList cols={4} rowHeight={120} sx={{ width: '100%' }}>
-                  {data.images.slice(0, 8).map((image, index) => (
+                  {data.images.slice(0, 8).map((image: File, index: number) => (
                     <ImageListItem key={index}>
                       <img
                         src={URL.createObjectURL(image)}
@@ -516,7 +516,7 @@ const ReviewPublishStep: React.FC<ReviewPublishStepProps> = ({ data, errors, onC
                     <>
                       <Typography variant="body2" sx={{ color: '#666', mb: 1, mt: 2 }}>Viewing Available</Typography>
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {data.viewingAvailability.map((time, index) => (
+                        {data.viewingAvailability.map((time: string, index: number) => (
                           <Chip key={index} label={time} size="small" icon={<ScheduleIcon />} />
                         ))}
                       </Box>

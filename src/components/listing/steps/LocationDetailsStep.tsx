@@ -19,7 +19,7 @@ import {
   Place as PlaceIcon,
   Map as MapIcon,
 } from '@mui/icons-material';
-import { ListingFormData } from '../../../pages/AddListingPage';
+import { ListingFormData } from '../../../types/listing';
 
 interface LocationDetailsStepProps {
   data: ListingFormData;
@@ -299,7 +299,7 @@ const LocationDetailsStep: React.FC<LocationDetailsStepProps> = ({
                         <strong>Nearby Landmarks:</strong>
                       </Typography>
                       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {data.landmarks.map((landmark, index) => (
+                        {data.landmarks.map((landmark: string, index: number) => (
                           <Chip
                             key={index}
                             label={landmark}
